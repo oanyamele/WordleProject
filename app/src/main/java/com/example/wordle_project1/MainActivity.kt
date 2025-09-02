@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
 
         guessInput = findViewById(R.id.guessInput)
         submitButton = findViewById(R.id.submitButton)
+        resetButton = findViewById(R.id.resetButton)
         feedback1 = findViewById(R.id.feedback1)
         feedback2 = findViewById(R.id.feedback2)
         feedback3 = findViewById(R.id.feedback3)
@@ -48,6 +49,20 @@ class MainActivity : AppCompatActivity() {
         resetButton.setOnClickListener {
             resetGame()
         }
+
+        resetGame()
+    }
+
+    private fun checkGuess(guess: String): String {
+        var result = ""
+        for (i in 0..3) {
+            result += when {
+                guess[i] == wordToGuess[i] -> "0"
+                guess[i] in wordToGuess -> "+"
+                else -> "X"
+            }
+        }
+        return result
     }
 
     private fun handleGuess() {
@@ -58,11 +73,12 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        val result = if (guess == wordToGuess) "Correct! $guess" else "Incorrect: $guess"
+        val result = checkGuess(guess)
+        val feedbackText = "$guess : $result"
 
         when (guessCount) {
-            0 -> feedback1.text = result
-            1 -> feedback2.text = result
+            0 -> feedback1.text = feedbackText
+            1 -> feedback2.text = feedbackText
             2 -> feedback3.text = result
         }
 
